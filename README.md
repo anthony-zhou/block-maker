@@ -14,7 +14,7 @@ Since the add-on is not published to the Google Workspace Marketplace, it can on
 
 ## Design Principles
 
-The original goal (still a rough model to follow) was to implement blocks from the [Block Protocol](https://blockprotocol.org/hub). Unfortunately, Google Docs has yet to support arbitrary HTML embeds, much less React/Typescript components. As a result, I've kept the blocks simple, but would love to know if there are ways to implement video embeds, file embeds, buttons, and other interactive widgets. 
+The original goal (still a rough model to follow) was to implement blocks from the [Block Protocol](https://blockprotocol.org/hub). Unfortunately, Google Docs has yet to support arbitrary HTML embeds, much less React/Typescript components. As a result, I've kept the blocks simple. My current idea for a workaround would be to make a browser extension that manually inserts custom HTML within each document (e.g. for a file embed) -- this solution feels technically feasible but also heavyweight and brittle. I would love to know if there are other ways to implement video embeds, file embeds, buttons, and other interactive components.
 
 ## Future Work
 
