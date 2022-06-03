@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+  <!-- The CSS package above applies Google styling to buttons and other elements. -->
+
+  <style>
+
+    /* Rules to override Google's built-in styles */
+    .block + .block {
+      margin-top: 0;
+    }
+
+
+    /* Custom style rules */
+    #container {
+      display: grid;
+      grid-template-columns: 120px 120px;
+      grid-row: 120px 120px;
+      grid-column-gap: 10px;
+      grid-row-gap: 10px;
+    }
+    #container .block {
+      background-color: #F5F5F5;
+      width: 120px;
+      height: 120px;
+    }
+    #container .block {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #container .block:hover {
+      background-color: #E5E5E5;
+      cursor: pointer;
+    }
+  </style>
+  <title></title>
+</head>
+<body>
+<div class="sidebar">
+  <form>
+    <div id="container"> 
+    </div>
+  </form>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+  /**
+   * On document load, assign click handlers to each button and try to load the
+   * user's origin and destination language preferences if previously set.
+   */
+  $(function() {
+    const blockNames = {'h1': 'Heading 1', 'h2': 'Heading 2', 'h3': 'Heading 3', 'callout': 'Callout'};
+    Object.entries(blockNames).forEach(([blockId, blockName]) => {
+      const block = $(`<div class="block" id="${blockId}"><p>${blockName}</p></div>`);
+      $('#container').append(block);
+      block.click(insertBlock(blockId));
+    });
+  });
+
+
+  /**
+   * Runs a server-side function to insert the translated text into the document
+   * at the user's cursor or selection.
+   */
+  function insertBlock(blockId) {
+    return () => {
+      this.disabled = true;
+      $('#error').remove();
+      google.script.run
+              .withSuccessHandler(
+                      function(returnSuccess, element) {
+                        element.disabled = false;
+                      })
+              .withFailureHandler(
+                      function(msg, element) {
+                        showError(msg, $('#button-bar'));
+                        element.disabled = false;
+                      })
+              .withUserObject(this)
+              .insertBlock(blockId);
+      google.script.host.editor.focus();
+    }
+  }
+
+  /**
+   * Inserts a div that contains an error message after a given element.
+   *
+   * @param {string} msg The error message to display.
+   * @param {DOMElement} element The element after which to display the error.
+   */
+  function showError(msg, element) {
+    const div = $('<div id="error" class="error">' + msg + '</div>');
+    $(element).after(div);
+  }
+</script>
+</body>
+</html>
